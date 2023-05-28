@@ -1,10 +1,18 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { gapi } from "gapi-script";
 
 import Home from './pages/Home'
 import Login from './pages/Login'
 import Register from './pages/Register'
+
+gapi.load("client:auth2", () => {
+  gapi.client.init({
+    clientId: process.env.REACT_APP_GOOGLE_ID,
+    plugin_name: "chat",
+  });
+});
 
 function App() {
   return (
