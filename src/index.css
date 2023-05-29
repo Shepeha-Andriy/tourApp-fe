@@ -4,3 +4,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; 
 }
+
+.header-text {
+  color: #606080;
+  font-weight: 500;
+  /* margin-top: 17px; */
+  margin: 0;
+  font-size: 17px;
+}

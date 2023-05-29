@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import * as api from '../api'
 
 const initialState = {
+  // user: JSON.parse(localStorage.getItem('profile')) || null,
   user: null,
   loading: false,
   error: ''
@@ -46,7 +47,15 @@ export const googleAuth = createAsyncThunk('/auth/googleAuth', async ({ result, 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action) => {
+      state.user = action.payload
+    },
+    setLogout: (state, action) => {
+      localStorage.removeItem('profile')
+      state.user = null
+    }
+  },
   extraReducers: (builder) => {
     builder
       // login
@@ -105,7 +114,6 @@ const authSlice = createSlice({
       .addMatcher(
         (action) => action.type === googleAuth.fulfilled.type,
         (state, action) => {
-          console.log(action)
           state.loading = false;
           localStorage.setItem('profile', JSON.stringify({ ...action.payload }))
           state.user = action.payload;
@@ -120,5 +128,7 @@ const authSlice = createSlice({
       )
   },
 });
+
+export const { setUser, setLogout } = authSlice.actions
 
 export default authSlice.reducer
