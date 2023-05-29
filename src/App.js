@@ -10,6 +10,7 @@ import Register from './pages/Register'
 import Header from './components/Header';
 import { useEffect } from 'react';
 import { setUser } from './redux/features/authSlice';
+import AddEditTour from './pages/AddEditTour';
 
 gapi.load("client:auth2", () => {
   gapi.client.init({
@@ -35,6 +36,8 @@ function App() {
           <Route path='/' element={<Home></Home>}></Route>
           <Route path='/login' element={<Login></Login>}></Route>
           <Route path='/register' element={<Register></Register>}></Route>
+          <Route path='/addTour' element={<AddEditTour></AddEditTour>}></Route>
+          <Route path='/editTour:id' element={<AddEditTour></AddEditTour>}></Route>
         </Routes>
       </div>
     </BrowserRouter>
