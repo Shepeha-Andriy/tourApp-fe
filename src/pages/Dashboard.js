@@ -3,8 +3,9 @@ import { MDBCard, MDBCardTitle, MDBCardText, MDBCardBody, MDBCardImage, MDBRow, 
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getToursByUser } from "../redux/features/tourSlice";
-// import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
+import Spinner from '../components/Spinner';
+import { deleteTour } from '../redux/features/tourSlice';
 
 export default function Dashboard() {
   const { user } = useSelector(state => ({ ...state.auth }))
@@ -13,8 +14,8 @@ export default function Dashboard() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getToursByUser(userId))
-  }, [dispatch, userId])
+    dispatch(getToursByUser())
+  }, [dispatch])
 
   const excerpt = (str) => {
     if (str.length > 40) {
@@ -24,13 +25,12 @@ export default function Dashboard() {
   };
 
   if (loading) {
-    return <h2 style={{marginTop: '200px'}}>Loading...</h2>;
-    // return <Spinner />;
+    return <Spinner></Spinner>
   }
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this tour ?")) {
-      // dispatch(deleteTour({ id, toast }));
+      dispatch(deleteTour({ id, toast }));
     }
   };
 
@@ -57,7 +57,7 @@ export default function Dashboard() {
       {userTours &&
         userTours.map((item) => (
           <MDBCardGroup key={item._id}>
-            <MDBCard style={{ maxWidth: "600px" }} className="mt-2">
+            <MDBCard style={{ maxWidth: "600px", maxHeight: '200px' }} className="mt-2">
               <MDBRow className="g-0">
                 <MDBCol md="4">
                   <MDBCardImage
@@ -65,6 +65,7 @@ export default function Dashboard() {
                     src={item.imageFile}
                     alt={item.title}
                     fluid
+                    style={{ height: '170px', width: '200px' }}
                   />
                 </MDBCol>
                 <MDBCol md="8">

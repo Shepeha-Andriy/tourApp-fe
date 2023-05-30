@@ -13,6 +13,8 @@ import { setUser } from './redux/features/authSlice';
 import AddEditTour from './pages/AddEditTour';
 import SingleTour from './pages/SingleTour';
 import Dashboard from './pages/Dashboard';
+import PrivateRoute from './components/PrivateRoute';
+import NotFound from './pages/NotFound';
 
 gapi.load("client:auth2", () => {
   gapi.client.init({
@@ -38,10 +40,11 @@ function App() {
           <Route path='/' element={<Home></Home>}></Route>
           <Route path='/login' element={<Login></Login>}></Route>
           <Route path='/register' element={<Register></Register>}></Route>
-          <Route path='/addTour' element={<AddEditTour></AddEditTour>}></Route>
-          <Route path='/editTour/:id' element={<AddEditTour></AddEditTour>}></Route>
+          <Route path='/addTour' element={<PrivateRoute><AddEditTour></AddEditTour></PrivateRoute>}></Route>
+          <Route path='/editTour/:id' element={<PrivateRoute><AddEditTour></AddEditTour></PrivateRoute>}></Route>
           <Route path='/tour/:id' element={<SingleTour></SingleTour>}></Route>
-          <Route path='/dashboard' element={<Dashboard></Dashboard>}></Route>
+          <Route path='/dashboard' element={<PrivateRoute><Dashboard></Dashboard></PrivateRoute>}></Route>
+          <Route path='*' element={<NotFound></NotFound>}></Route>
         </Routes>
       </div>
     </BrowserRouter>
