@@ -1,19 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MDBNavbar, MDBContainer, MDBIcon, MDBNavbarNav, MDBNavbarItem, MDBNavbarLink, MDBNavbarToggler, MDBCollapse, MDBNavbarBrand, MDBDropdown } from 'mdb-react-ui-kit'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLogout } from '../redux/features/authSlice'
+import { getToursBySearch } from '../redux/features/tourSlice'
+import { useNavigate } from 'react-router-dom'
+import { setSearch2 } from '../redux/features/searchSlice'
+import decode from 'jwt-decode'
 
 export default function Header() {
   const [show, setShow] = useState(true)
+  const [search, setSearch] = useState('')
   const { user } = useSelector(state => (state.auth))
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const token = user?.token
+
+  if (token) {
+    const decodedToken = decode(token)
+
+    if (decodedToken.exp * 1000 < new Date().getTime()) {
+      dispatch(setLogout())
+    }
+  }
 
   const handleLogout = async () => {
     dispatch(setLogout())
   }
 
+  useEffect(() => {
+    dispatch(setSearch2(search))
+  }, [search, dispatch])
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+
+    if (search) {
+      dispatch(getToursBySearch(search))
+      navigate(`/tours/search?searchQuery=${search}`)
+      setSearch('')
+    } else {
+      navigate('/')
+    }
+  }
+
   return (
-    <MDBNavbar fixed='top' expand='lg' style={{backgroundColor: '#f0e6ea'}}>
+      <MDBNavbar fixed='top' expand='lg' style={{backgroundColor: '#f0e6ea'}}>
       <MDBContainer>
         <MDBNavbarBrand href='/' style={{color: '#606080', fontWeight: '600', fontSize: '22px'}}>
           Tourpedia
@@ -32,10 +63,17 @@ export default function Header() {
             {user?.user?._id && (
               <MDBNavbarItem>
                 {/* <MDBNavbarLink> */}
-                  <p>Logged in as: {user?.user?.name}</p>
+                  <h5 style={{marginRight: '30px', marginTop: '12px'}}>Logged in as: {user?.user?.name}</h5>
                 {/* </MDBNavbarLink> */}
               </MDBNavbarItem>
-            )}  
+          )}  
+          
+          <form className='d-flex input-group w-auto' onSubmit={handleSubmit} style={{marginTop: '5px', marginLeft: '5px'}}>
+            <input type='text' className='form-control' placeholder='Search Tour' value={search} onChange={(e) => setSearch(e.target.value)}></input>
+            <div style={{marginTop: '5px', marginLeft: '5px'}}>
+              <MDBIcon fas icon='search'></MDBIcon>
+            </div>
+          </form>
           
           <MDBNavbarItem>
               <MDBNavbarLink href='/'>
@@ -74,7 +112,13 @@ export default function Header() {
               </MDBNavbarLink>
             </MDBNavbarItem>)
           }
-          </MDBNavbarNav>
+        </MDBNavbarNav>
+        {/* <form className='d-flex input-group w-auto' onSubmit={handleSubmit}>
+          <input type='text' className='form-control' placeholder='Search Tour' value={search} onChange={(e) => setSearch(e.target.value)}></input>
+          <div style={{marginTop: '5px', marginLeft: '5px'}}>
+            <MDBIcon fas icon='search'></MDBIcon>
+          </div>
+        </form> */}
         {/* </MDBCollapse> */}
       </MDBContainer>
     </MDBNavbar>

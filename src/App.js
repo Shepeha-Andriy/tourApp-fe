@@ -38,6 +38,7 @@ function App() {
         <ToastContainer></ToastContainer>
         <Routes>
           <Route path='/' element={<Home></Home>}></Route>
+          <Route path='/tours/search' element={<Home></Home>}></Route>
           <Route path='/login' element={<Login></Login>}></Route>
           <Route path='/register' element={<Register></Register>}></Route>
           <Route path='/addTour' element={<PrivateRoute><AddEditTour></AddEditTour></PrivateRoute>}></Route>

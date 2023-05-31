@@ -5,11 +5,13 @@ const initialState = {
   tour: {},
   tours: [],
   userTours: [],
+  currentPage: 1,
+  numberOfPages: null,
   loading: false,
   error: ''
 }
 
-export const createTour = createAsyncThunk('/auth/createTour', async ({ updaterTourData, navigate, toast }, { rejectWithValue }) => {
+export const createTour = createAsyncThunk('/tour/createTour', async ({ updaterTourData, navigate, toast }, { rejectWithValue }) => {
   try {
     const res = await api.createTour(updaterTourData)
     toast.success('Tour added successfully')
@@ -21,9 +23,9 @@ export const createTour = createAsyncThunk('/auth/createTour', async ({ updaterT
   }
 })
 
-export const getTours = createAsyncThunk('/auth/getTours', async ( _, { rejectWithValue }) => {
+export const getTours = createAsyncThunk('/tour/getTours', async ( page, { rejectWithValue }) => {
   try {
-    const res = await api.getTours()
+    const res = await api.getTours(page)
 
     return res.data
   } catch (error) {
@@ -31,7 +33,7 @@ export const getTours = createAsyncThunk('/auth/getTours', async ( _, { rejectWi
   }
 })
 
-export const getTour = createAsyncThunk('/auth/getTour', async ( id, { rejectWithValue }) => {
+export const getTour = createAsyncThunk('/tour/getTour', async ( id, { rejectWithValue }) => {
   try {
     const res = await api.getTour(id)
 
@@ -41,7 +43,7 @@ export const getTour = createAsyncThunk('/auth/getTour', async ( id, { rejectWit
   }
 })
 
-export const getToursByUser = createAsyncThunk('/auth/getToursByUser', async ( _, { rejectWithValue }) => {
+export const getToursByUser = createAsyncThunk('/tour/getToursByUser', async ( _, { rejectWithValue }) => {
   try {
     const res = await api.getToursByUser()
 
@@ -51,7 +53,7 @@ export const getToursByUser = createAsyncThunk('/auth/getToursByUser', async ( _
   }
 })
 
-export const deleteTour = createAsyncThunk('/auth/deleteTour', async ( { id, toast }, { rejectWithValue }) => {
+export const deleteTour = createAsyncThunk('/tour/deleteTour', async ( { id, toast }, { rejectWithValue }) => {
   try {
     const res = await api.deleteTour(id)
     toast.success('Tour deleted successfully')
@@ -62,7 +64,7 @@ export const deleteTour = createAsyncThunk('/auth/deleteTour', async ( { id, toa
   }
 })
 
-export const updateTour = createAsyncThunk('/auth/updateTour', async ( {updaterTourData, id, toast, navigate }, { rejectWithValue }) => {
+export const updateTour = createAsyncThunk('/tour/updateTour', async ( {updaterTourData, id, toast, navigate }, { rejectWithValue }) => {
   try {
     const res = await api.updateTour(updaterTourData, id)
     toast.success('Tour updated successfully')
@@ -74,10 +76,34 @@ export const updateTour = createAsyncThunk('/auth/updateTour', async ( {updaterT
   }
 })
 
-const authSlice = createSlice({
+export const getToursBySearch = createAsyncThunk('/tour/getTourBySearch', async ( searchQuery, { rejectWithValue }) => {
+  try {
+    const res = await api.getToursBySearch(searchQuery)
+
+    return res.data
+  } catch (error) {
+    return rejectWithValue(error.response.data)
+  }
+})
+
+export const likeTour = createAsyncThunk('/tour/likeTour', async ( { _id }, { rejectWithValue }) => {
+  try {
+    const res = await api.likeTour(_id)
+
+    return res.data
+  } catch (error) {
+    return rejectWithValue(error.response.data)
+  }
+})
+
+const tourSlice = createSlice({
   name: 'tour',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload
+    }
+  },
   extraReducers: (builder) => {
     builder
       // create tour
@@ -112,7 +138,9 @@ const authSlice = createSlice({
         (action) => action.type === getTours.fulfilled.type,
         (state, action) => {
           state.loading = false;
-          state.tours = action.payload
+          state.tours = action.payload.data
+          state.numberOfPages = action.payload.numberOfPages
+          state.currentPage = action.payload.currentPage
         }
       )
       .addMatcher(
@@ -217,7 +245,51 @@ const authSlice = createSlice({
           state.error = action.payload.message
         }
       )
+    // get tours by search
+      .addMatcher(
+        (action) => action.type === getToursBySearch.pending.type,
+        (state) => {
+          state.loading = true;
+        }
+      )
+      .addMatcher(
+        (action) => action.type === getToursBySearch.fulfilled.type,
+        (state, action) => {
+          state.loading = false;
+          state.tours = action.payload
+        }
+      )
+      .addMatcher(
+        (action) => action.type === getToursBySearch.rejected.type,
+        (state, action) => {
+          state.loading = false;
+          state.error = action.payload.message
+        }
+      )
+    // like tour
+      .addMatcher(
+        (action) => action.type === likeTour.pending.type,
+        (state) => {}
+      )
+      .addMatcher(
+        (action) => action.type === likeTour.fulfilled.type,
+        (state, action) => {
+          state.loading = false;
+          const { arg: {_id} } = action.meta
+          if (_id) {
+            state.tours = state.tours.map((item) => item._id === _id ? action.payload : item)
+          }
+        }
+      )
+      .addMatcher(
+        (action) => action.type === likeTour.rejected.type,
+        (state, action) => {
+          state.error = action.payload.message
+        }
+      )
   },
 });
 
-export default authSlice.reducer
+export const { setCurrentPage } = tourSlice.actions
+
+export default tourSlice.reducer

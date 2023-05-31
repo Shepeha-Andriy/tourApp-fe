@@ -22,7 +22,8 @@ code {
   position: absolute;
   top: 8px;
   left: 16px;
-  color: #fff;
+  /* color: #fff; */
+  color: black;
   font-weight: 600;
   font-size: 18px;
 }
