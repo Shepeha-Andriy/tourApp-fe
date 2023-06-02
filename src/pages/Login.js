@@ -75,7 +75,7 @@ export default function Login() {
           </MDBValidation>
           <br></br>
           <GoogleLogin
-            clientId={'762256281244-s42bs7oarulp55hrb73l4em7h18keq2h.apps.googleusercontent.com'}
+            clientId={process.env.REACT_APP_GOOGLE_ID}
             render={(renderProps) => (
               <MDBBtn style={{ width: '100%' }} color='danger' onClick={renderProps.onClick} disabled={renderProps.disabled}>
                 <MDBIcon className='me-2' fab icon='google'></MDBIcon>

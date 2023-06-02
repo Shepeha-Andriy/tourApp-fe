@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SHORTNAME = 'tourapp-5';
-const WEBSITE_URL = 'http://localhost:3000';
+const WEBSITE_URL = process.env.REACT_APP_WEBSITE_URL;
 
 function renderDisqus() {
   if (window.DISQUS === undefined) {
