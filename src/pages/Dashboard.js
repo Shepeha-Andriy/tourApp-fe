@@ -10,7 +10,7 @@ import { deleteTour } from '../redux/features/tourSlice';
 export default function Dashboard() {
   const { user } = useSelector(state => ({ ...state.auth }))
   const { userTours, loading } = useSelector(state => ({ ...state.tour }))
-  const userId = user?.user?._id
+  // const userId = user?.user?._id
   const dispatch = useDispatch()
 
   useEffect(() => {

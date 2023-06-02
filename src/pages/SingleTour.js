@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react'
 import {
-  MDBCard, MDBCardBody, MDBCardText, MDBCardImage, MDBContainer, MDBIcon, MDBBtn, MDBModalContent } from "mdb-react-ui-kit";
+  MDBCard, MDBCardBody, MDBCardText, MDBCardImage, MDBContainer, MDBIcon } from "mdb-react-ui-kit";
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getTour } from '../redux/features/tourSlice';
 import moment from 'moment'
+import DisqusThread from '../components/DisqusThread';
+import Spinner from '../components/Spinner';
 
 export default function SingleTour() {
   const { tour, loading } = useSelector(state => ({ ...state.tour }))
   const dispatch = useDispatch()
   const { id } = useParams()
+  // const navigate = useNavigate()
 
   useEffect(() => {
     if (id) {
@@ -19,13 +22,17 @@ export default function SingleTour() {
 
   if (loading) {
     return (
-      <h2 style={{marginTop: '200px'}}>Loading...</h2>
+      <Spinner></Spinner>
     )
   }
   
   return (
     <div style={{marginTop: '200px'}}>
       <MDBContainer>
+        {/* <MDBBtn tag="a" color="none" style={{ float: "left", color: "#000" }} onClick={() => navigate("/")}>
+            {/* <MDBIcon fas size="lg" icon="arrow-left" style={{ float: "left", height: '80px' }}/> */}
+            {/* {'Back to home'} */}
+        {/* </MDBBtn> */}
         <MDBCard className='mb-3 mt-2'>
           <MDBCardImage position='top' style={{ width: '100%', maxHeight: '600px' }} src={tour?.imageFile} alt={tour?.title}></MDBCardImage>
           <MDBCardBody>
@@ -48,6 +55,9 @@ export default function SingleTour() {
             </MDBCardText>
           </MDBCardBody>
         </MDBCard>
+        {
+          tour?.title && <DisqusThread id={id} title={tour.title} path={`/tour/${id}`}></DisqusThread>
+        }
       </MDBContainer>
     </div>
   )

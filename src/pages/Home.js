@@ -9,7 +9,7 @@ import Pagination from '../components/Pagination';
 
 export default function Home() {
   const {tours, loading, currentPage, numberOfPages} = useSelector(state => ({ ...state.tour }))
-  const {search} = useSelector(state => ({ ...state.search }))
+  // const {search} = useSelector(state => ({ ...state.search }))
   const dispatch = useDispatch()
 
   useEffect(() => {

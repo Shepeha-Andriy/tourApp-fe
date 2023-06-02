@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { MDBCard, MDBCardBody, MDBInput, MDBFooter, MDBValidation, MDBBtn, MDBIcon, MDBSpinner, MDBCardFooter } from 'mdb-react-ui-kit'
+import { MDBCard, MDBCardBody, MDBInput, MDBValidation, MDBBtn, MDBIcon, MDBSpinner, MDBCardFooter } from 'mdb-react-ui-kit'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { googleAuth, login } from '../redux/features/authSlice'
 import { GoogleLogin } from 'react-google-login'
-
-const initialState = {
-  email: '',
-  password: ''
-}
 
 export default function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' })

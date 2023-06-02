@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { MDBCard, MDBCardBody, MDBValidation, MDBBtn, MDBInput } from "mdb-react-ui-kit";
-import ChipInput from 'material-ui-chip-input'
+import { MDBCard, MDBCardBody, MDBValidation, MDBBtn } from "mdb-react-ui-kit";
+// import ChipInput from 'material-ui-chip-input'
 import FileBase from 'react-file-base64'
 import { toast } from 'react-toastify'
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,8 +9,8 @@ import { createTour, updateTour } from '../redux/features/tourSlice';
 
 export default function AddEditTour() {
   const [tourData, setTourData] = useState({ title: '', descriptions: '', imageFile: '' })
-  const { title, descriptions, imageFile } = tourData
-  const {error, loading, userTours} = useSelector(state => ({ ...state.tour }))
+  const { title, descriptions } = tourData
+  const {error, userTours} = useSelector(state => ({ ...state.tour }))
   const { user } = useSelector(state => ({ ...state.auth }))
   const dispatch = useDispatch()
   const navigate = useNavigate()

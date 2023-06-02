@@ -1,5 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import * as api from '../api'
+import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
   // user: JSON.parse(localStorage.getItem('profile')) || null,

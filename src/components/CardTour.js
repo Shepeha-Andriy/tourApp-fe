@@ -66,7 +66,7 @@ export default function CardTour({ imageFile, descriptions, title, _id, name, li
         <div className="top-left">{name}</div>
         <span className="text-start tag-card">
           <MDBBtn
-            style={{ float: "right" }}
+            style={{ float: "right", marginRight: '10px' }}
             tag="a"
             color="none"
             onClick={!user?.user ? null : handleLike}

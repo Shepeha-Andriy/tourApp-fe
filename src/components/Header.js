@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { MDBNavbar, MDBContainer, MDBIcon, MDBNavbarNav, MDBNavbarItem, MDBNavbarLink, MDBNavbarToggler, MDBCollapse, MDBNavbarBrand, MDBDropdown } from 'mdb-react-ui-kit'
+import { MDBNavbar, MDBContainer, MDBIcon, MDBNavbarNav, MDBNavbarItem, MDBNavbarLink, MDBNavbarBrand } from 'mdb-react-ui-kit'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLogout } from '../redux/features/authSlice'
 import { getToursBySearch } from '../redux/features/tourSlice'
@@ -8,7 +8,7 @@ import { setSearch2 } from '../redux/features/searchSlice'
 import decode from 'jwt-decode'
 
 export default function Header() {
-  const [show, setShow] = useState(true)
+  // const [show, setShow] = useState(true)
   const [search, setSearch] = useState('')
   const { user } = useSelector(state => (state.auth))
   const dispatch = useDispatch()
